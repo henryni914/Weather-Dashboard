@@ -1,103 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Weather Dashboard</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Weather Dashboard</h1>
     <div class="row">
-        <div class="col-4">
-            <nav class="navbar navbar-light bg-light">
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Enter City" aria-label="Search" />
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-                        Search
-                    </button>
-                </form>
-            </nav>
+      <div class="col-4">
+        <nav class="navbar navbar-light bg-light">
+          <form class="form-inline">
+            <input
+              class="form-control mr-sm-2"
+              type="search"
+              placeholder="Enter City"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
+        </nav>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <h2>
+            City
+            <!-- <div id="icon">
+              <img id="openIcon" src="" alt="Weather Icon" />
+            </div> -->
+          </h2>
+          <p id="temperature">Current Temperature</p>
+          <p id="humidity">Humidity</p>
+          <p id="windSpeed">Wind Speed</p>
+          <p id="uvIndex">UV Index</p>
         </div>
         <div class="row">
-            <div class="col-8">
-                <h2>City</h2>
-                <p id="temperature">Current Temperature</p>
-                <p id="humidity">Humidity</p>
-                <p id="windSpeed">Wind Speed</p>
-                <p id="uvIndex">UV Index</p>
-            </div>
-            <div class="row">
-                <h3 class="col-12">5-Day Forecast</h3>
-                <br />
-                <div class="col">
-                    Day 1
-                </div>
-                <div class="col">
-                    Day 2
-                </div>
-                <div class="col">
-                    Day 3
-                </div>
-                <div class="col">
-                    Day 4
-                </div>
-                <div class="col">
-                    Day 5
-                </div>
-            </div>
+          <h3 class="col-12">5-Day Forecast</h3>
+          <br />
+          <div class="col">
+            Day 1
+          </div>
+          <div class="col">
+            Day 2
+          </div>
+          <div class="col">
+            Day 3
+          </div>
+          <div class="col">
+            Day 4
+          </div>
+          <div class="col">
+            Day 5
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript">
-        $(".btn").on("click", function () {
-            event.preventDefault();
-            var userSearch = $(".form-control").val();
-            console.log(userSearch);
-            var apiKey = "bf17ba4b789fcd7882b2b7d45dac95e8";
-            var queryURL =
-                "https://api.openweathermap.org/data/2.5/weather?q=" +
-                userSearch +
-                "&apikey=" +
-                apiKey;
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).then(function (response) {
-                console.log(response);
-                $("h2").text(response.name);
-                $("#temperature").text("Current Temperature: " + response.main.temp);
-                $("#humidity").text("Humidity: " + response.main.humidity);
-                $("#windSpeed").text("Wind Speed: " + response.wind.speed);
-                // $("#uvIndex").text(+ ": " + response.main.temp);
-                var lat = response.coord.lat;
-                console.log(lat);
-                var lon = response.coord.lon;
-                console.log(lon);
-                var uvURL =
-                    "http://api.openweathermap.org/data/2.5/uvi?appid=" +
-                    apiKey +
-                    "&lat=" +
-                    lat +
-                    "&lon=" +
-                    lon;
-                $.ajax({
-                    url: uvURL,
-                    method: "GET"
-                }).then(function (uvResponse) {
-                    console.log(uvResponse);
-                    $("#uvIndex").text("UV Index: " + uvResponse.value);
-                });
-            });
+      $(".btn").on("click", function() {
+        event.preventDefault();
+        var date = moment().format(" (M/D/YY)");
+        var userSearch = $(".form-control").val();
+        console.log(userSearch);
+        var lineBreak = $("<br>");
+        var newBtn = $("<button>");
+            newBtn.text(userSearch);
+        $(".col-4").append(newBtn, lineBreak);
+        var apiKey = "bf17ba4b789fcd7882b2b7d45dac95e8";
+        var queryURL =
+          "https://api.openweathermap.org/data/2.5/weather?q=" +
+          userSearch +
+          "&apikey=" +
+          apiKey +
+          "&units=imperial";
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response);
+        //   var icon =
+        //     "http://openweathermap.org/img/w/" +
+        //     response.weather[0].icon +
+        //     ".png";
+        //   console.log("Icon " + icon);
+        //   $("#openIcon").attr("src", icon);
+          $("h2").text(response.name + date);
+          $("#temperature").text(
+            "Current Temperature: " + response.main.temp + "° F"
+          );
+          $("#humidity").text("Humidity: " + response.main.humidity + "%");
+          $("#windSpeed").text("Wind Speed: " + response.wind.speed + " MPH");
+          // $("#uvIndex").text(+ ": " + response.main.temp);
+          var lat = response.coord.lat;
+          console.log(lat);
+          var lon = response.coord.lon;
+          console.log(lon);
+          uvURL =
+            "http://api.openweathermap.org/data/2.5/uvi?appid=" +
+            apiKey +
+            "&lat=" +
+            lat +
+            "&lon=" +
+            lon;
+          $.ajax({
+            url: uvURL,
+            method: "GET"
+          }).then(function(uvResponse) {
+            console.log(uvResponse);
+            $("#uvIndex").text("UV Index: " + uvResponse.value);
+          });
         });
+      });
     </script>
-</body>
-
+  </body>
 </html>
