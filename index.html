@@ -18,21 +18,23 @@
             <nav class="navbar navbar-light bg-light">
                 <form class="form-inline">
                     <input class="form-control mr-sm-2" type="search" placeholder="Enter City" aria-label="Search" />
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                        Search
+                    </button>
                 </form>
             </nav>
         </div>
         <div class="row">
             <div class="col-8">
-                <h2>Placeholder</h2>
-                <p>Temperature Goes Here</p>
-                <p>Humidity</p>
-                <p>Wind Speed</p>
-                <p>UV Index</p>
+                <h2>City</h2>
+                <p id="temperature">Current Temperature</p>
+                <p id="humidity">Humidity</p>
+                <p id="windSpeed">Wind Speed</p>
+                <p id="uvIndex">UV Index</p>
             </div>
             <div class="row">
                 <h3 class="col-12">5-Day Forecast</h3>
-                <br>
+                <br />
                 <div class="col">
                     Day 1
                 </div>
@@ -48,14 +50,53 @@
                 <div class="col">
                     Day 5
                 </div>
-            </div>              
+            </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript">
-
-
+        $(".btn").on("click", function () {
+            event.preventDefault();
+            var userSearch = $(".form-control").val();
+            console.log(userSearch);
+            var apiKey = "bf17ba4b789fcd7882b2b7d45dac95e8";
+            var queryURL =
+                "https://api.openweathermap.org/data/2.5/weather?q=" +
+                userSearch +
+                "&apikey=" +
+                apiKey;
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response);
+                $("h2").text(response.name);
+                $("#temperature").text("Current Temperature: " + response.main.temp);
+                $("#humidity").text("Humidity: " + response.main.humidity);
+                $("#windSpeed").text("Wind Speed: " + response.wind.speed);
+                // $("#uvIndex").text(+ ": " + response.main.temp);
+                var lat = response.coord.lat;
+                console.log(lat);
+                var lon = response.coord.lon;
+                console.log(lon);
+                var uvURL =
+                    "http://api.openweathermap.org/data/2.5/uvi?appid=" +
+                    apiKey +
+                    "&lat=" +
+                    lat +
+                    "&lon=" +
+                    lon;
+                $.ajax({
+                    url: uvURL,
+                    method: "GET"
+                }).then(function (uvResponse) {
+                    console.log(uvResponse);
+                    $("#uvIndex").text("UV Index: " + uvResponse.value);
+                });
+            });
+        });
     </script>
 </body>
 
