@@ -1,4 +1,27 @@
+body {
+    margin: 0 auto;
+}
 h1 {
     text-align: center;
     background-color: slategray;
+}
+
+button {
+    background-color: slategray;
+    margin-left: 12px;
+    text-align: left;
+}
+
+.row {
+    margin-left: 2px;
+}
+
+.mainDisplay {
+    border: 2px solid slategray;
+}
+
+.col {
+    background-color: steelblue;
+    margin-left: 5px;
+    margin-top: 5px;
 }
