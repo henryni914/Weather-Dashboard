@@ -66,21 +66,20 @@
       var saveCities = [];
       retrieveLocal();
       //Generates the data from the API
-      function generateWeather() {
+      function generateWeather(userSearch) {
+        console.log(userSearch)
         event.preventDefault();
         $(".fiveDay").empty();
         var date = moment().format(" (M/D/YY)");
-        var userSearch = $(".form-control").val();
-        console.log(userSearch);
-        var lineBreak = $("<br>");
-        var newBtn = $("<button>");
-        newBtn.text(userSearch);
-        newBtn.addClass("col-10", "savedCity");
-        newBtn.attr("savedCity", userSearch);
-        // saveCities.push(userSearch);
-        // localStorage.setItem("Cities", JSON.stringify(saveCities));
-        console.log(saveCities);
-        $(".col-4").append(newBtn, lineBreak);
+        // var userSearch = $(".form-control").val();
+        // console.log(userSearch);
+        // var lineBreak = $("<br>");
+        // var newBtn = $("<button>");
+        // newBtn.text(userSearch);
+        // newBtn.addClass("col-10", "savedCity");
+        // newBtn.attr("savedCity", userSearch);
+        // console.log(saveCities);
+        // $(".col-4").append(newBtn, lineBreak);
         var apiKey = "bf17ba4b789fcd7882b2b7d45dac95e8";
         var queryURL =
           "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -133,17 +132,17 @@
           "&apikey=" +
           apiKey +
           "&units=imperial";
-        console.log(userSearch, apiKey);
+        // console.log(userSearch, apiKey);
         $.ajax({
           url: forecastURL,
           method: "GET"
         }).then(function(forecast) {
           var j = 0;
-          console.log(forecast);
-          console.log(forecast.list[0]);
+          //   console.log(forecast);
+          //   console.log(forecast.list[0]);
           for (let i = 0; i < 5; i++) {
             j += 7;
-            console.log(j);
+            // console.log(j);
             var cardBody = $("<div>");
             var cardDate = $("<p>");
             var cardIcon = $("<img>");
@@ -179,16 +178,44 @@
           }
         }
       }
+      //When user hits search, the input is put through a function to generate weather data.
       $(".btn").on("click", function() {
         var userSearch = $(".form-control").val();
+        console.log(userSearch + " typeof: " +typeof(userSearch))
         if (userSearch == "") {
           return;
+        } else {
+          console.log(userSearch);
+          var lineBreak = $("<br>");
+          var newBtn = $("<button>");
+          newBtn.text(userSearch);
+          newBtn.addClass("col-10", "savedCity");
+          newBtn.attr("savedCity", userSearch);
+          console.log(saveCities);
+          $(".col-4").append(newBtn, lineBreak);
+          saveCities.push(userSearch);
+          localStorage.setItem("Cities", JSON.stringify(saveCities));
+          generateWeather(userSearch);
+          console.log("userSearch on click: " + userSearch);
         }
-        saveCities.push(userSearch);
-        localStorage.setItem("Cities", JSON.stringify(saveCities));
-        generateWeather(userSearch);
-        console.log("userSearch on click: " + userSearch);
       });
+
+      $("button").on("click", function() {
+        //need to break down some functions. Added empty buttons when using
+        var cityBtn = $(this).attr("savedCity");
+        console.log(cityBtn +" "+ typeof(cityBtn)); //returns as a string, so search array for this string and then userSearch = saveCities[];
+        // var cityIndex = saveCities.indexOf(cityBtn)
+        // console.log(cityIndex);
+        // userSearch = saveCities[cityIndex];
+        // console.log(userSearch);
+        generateWeather(cityBtn);
+      });
+
+      // $("button").on("click", function(){ //need to break down some functions. Added empty buttons when using
+      //     var userSearch = $(this).attr("savedCity");
+      //     console.log(userSearch);
+      //     generateWeather(userSearch);
+      // })
     </script>
   </body>
 </html>
