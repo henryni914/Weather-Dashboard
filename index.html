@@ -53,38 +53,7 @@
           </div>
           <div class="container">
             <h3 class="col-12">5-Day Forecast</h3>
-            <div class="row fiveDay">
-              <!-- <div class="col">
-              <p>Day 1</p>
-              <img />
-              <p>Temperature</p>
-              <p>Humidity</p>
-            </div>
-            <div class="col">
-              <p>Day 2</p>
-              <img />
-              <p>Temperature</p>
-              <p>Humidity</p>
-            </div>
-            <div class="col">
-              <p>Day 3</p>
-              <img />
-              <p>Temperature</p>
-              <p>Humidity</p>
-            </div>
-            <div class="col">
-              <p>Day 4</p>
-              <img />
-              <p>Temperature</p>
-              <p>Humidity</p>
-            </div>
-            <div class="col">
-              <p>Day 5</p>
-              <img />
-              <p>Temperature</p>
-              <p>Humidity</p>
-            </div> -->
-            </div>
+            <div class="row fiveDay"></div>
           </div>
         </div>
       </div>
@@ -93,7 +62,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript">
-      $(".btn").on("click", function() {
+      //Global variable
+      var saveCities = [];
+      retrieveLocal();
+      //Generates the data from the API
+      function generateWeather() {
         event.preventDefault();
         $(".fiveDay").empty();
         var date = moment().format(" (M/D/YY)");
@@ -103,6 +76,10 @@
         var newBtn = $("<button>");
         newBtn.text(userSearch);
         newBtn.addClass("col-10", "savedCity");
+        newBtn.attr("savedCity", userSearch);
+        // saveCities.push(userSearch);
+        // localStorage.setItem("Cities", JSON.stringify(saveCities));
+        console.log(saveCities);
         $(".col-4").append(newBtn, lineBreak);
         var apiKey = "bf17ba4b789fcd7882b2b7d45dac95e8";
         var queryURL =
@@ -173,7 +150,11 @@
             var cardTemp = $("<p>");
             var cardHumidity = $("<p>");
             cardBody.attr({ class: "col", value: i });
-            cardDate.text(moment().add(i + 1, 'd').format("M/D/YY"));
+            cardDate.text(
+              moment()
+                .add(i + 1, "d")
+                .format("M/D/YY")
+            );
             cardTemp.text("Temperature: " + forecast.list[j].main.temp + "° F");
             // cardIcon.attr("src", forecast.list[j].weather.icon);
             cardHumidity.text(
@@ -183,16 +164,31 @@
             $(".fiveDay").append(cardBody);
           }
         });
+      }
+      function retrieveLocal() {
+        var localCity = JSON.parse(localStorage.getItem("Cities"));
+        if (localCity !== null) {
+          saveCities = localCity;
+          for (let i = 0; i < localCity.length; i++) {
+            var getCity = localCity[i];
+            var newBtn = $("<button>");
+            newBtn.text(getCity);
+            newBtn.addClass("col-10", "savedCity");
+            newBtn.attr("savedCity", getCity);
+            $(".col-4").append(newBtn);
+          }
+        }
+      }
+      $(".btn").on("click", function() {
+        var userSearch = $(".form-control").val();
+        if (userSearch == "") {
+          return;
+        }
+        saveCities.push(userSearch);
+        localStorage.setItem("Cities", JSON.stringify(saveCities));
+        generateWeather(userSearch);
+        console.log("userSearch on click: " + userSearch);
       });
-
-      //   function getForecast(){
-      //       var forecastURL = "api.openweathermap.org/data/2.5/forecast?q=" + event.target
-
-      //     $.ajax({
-      //         url:
-      //     })
-      //   }
-      //   document.getElementsByClassName("savedCity").on("click", getForecast());
     </script>
   </body>
 </html>
