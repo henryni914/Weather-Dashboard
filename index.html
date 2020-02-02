@@ -51,9 +51,10 @@
             <p class="row" id="windSpeed">Wind Speed</p>
             <p class="row" id="uvIndex">UV Index</p>
           </div>
-          <div class="row fiveDay">
+          <div class="container">
             <h3 class="col-12">5-Day Forecast</h3>
-            <!-- <div class="col">
+            <div class="row fiveDay">
+              <!-- <div class="col">
               <p>Day 1</p>
               <img />
               <p>Temperature</p>
@@ -83,6 +84,7 @@
               <p>Temperature</p>
               <p>Humidity</p>
             </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -93,6 +95,7 @@
     <script type="text/javascript">
       $(".btn").on("click", function() {
         event.preventDefault();
+        $(".fiveDay").empty();
         var date = moment().format(" (M/D/YY)");
         var userSearch = $(".form-control").val();
         console.log(userSearch);
@@ -126,26 +129,27 @@
           $("#humidity").text("Humidity: " + response.main.humidity + "%");
           $("#windSpeed").text("Wind Speed: " + response.wind.speed + " MPH");
           // $("#uvIndex").text(+ ": " + response.main.temp);
+          // This portion retrieves the UV Index from another URL
           var lat = response.coord.lat;
           console.log(lat);
           var lon = response.coord.lon;
           console.log(lon);
-            var uvURL =
-              "http://api.openweathermap.org/data/2.5/uvi?apikey=" +
-              apiKey +
-              "&lat=" +
-              lat +
-              "&lon=" +
-              lon;
-            $.ajax({
-              url: uvURL,
-              method: "GET"
-            }).then(function(uvResponse) {
-              console.log(uvResponse);
-              $("#uvIndex").text("UV Index: " + uvResponse.value);
-            });
+          var uvURL =
+            "http://api.openweathermap.org/data/2.5/uvi?apikey=" +
+            apiKey +
+            "&lat=" +
+            lat +
+            "&lon=" +
+            lon;
+          $.ajax({
+            url: uvURL,
+            method: "GET"
+          }).then(function(uvResponse) {
+            console.log(uvResponse);
+            $("#uvIndex").text("UV Index: " + uvResponse.value);
+          });
         });
-        // This section begins the forecast 
+        // This section begins the forecast
         var forecastURL =
           "https:api.openweathermap.org/data/2.5/forecast?q=" +
           userSearch +
@@ -164,16 +168,18 @@
             j += 7;
             console.log(j);
             var cardBody = $("<div>");
+            var cardDate = $("<p>");
             var cardIcon = $("<img>");
             var cardTemp = $("<p>");
             var cardHumidity = $("<p>");
             cardBody.attr({ class: "col", value: i });
+            cardDate.text(moment().add(i + 1, 'd').format("M/D/YY"));
             cardTemp.text("Temperature: " + forecast.list[j].main.temp + "° F");
             // cardIcon.attr("src", forecast.list[j].weather.icon);
             cardHumidity.text(
               "Humidity: " + forecast.list[j].main.humidity + "%"
             );
-            cardBody.append(cardTemp, cardIcon, cardHumidity); //Need to re-add cardIcon, after fixing img source
+            cardBody.append(cardDate, cardIcon, cardTemp, cardHumidity); //Need to re-add cardIcon, after fixing img source
             $(".fiveDay").append(cardBody);
           }
         });
