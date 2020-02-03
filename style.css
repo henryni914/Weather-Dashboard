@@ -25,3 +25,11 @@ button {
     margin-left: 5px;
     margin-top: 5px;
 }
+
+#temperature,
+#humidity,
+#windSpeed,
+#uvIndex {
+    margin-left: 15px;
+}
+
