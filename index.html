@@ -97,7 +97,7 @@
           console.log(response);
           var iconNum = response.weather[0].icon;
           console.log(iconNum);
-          var iconMain = "http://openweathermap.org/img/wn/" + iconNum + ".png";
+          var iconMain = "https://openweathermap.org/img/wn/" + iconNum + ".png";
           console.log("Icon url is: " + iconMain);
           $("img").attr("src", iconMain);
           $("h2").text(response.name + date);
@@ -113,7 +113,7 @@
           var lon = response.coord.lon;
           console.log(lon);
           var uvURL =
-            "http://api.openweathermap.org/data/2.5/uvi?apikey=" +
+            "https://api.openweathermap.org/data/2.5/uvi?apikey=" +
             apiKey +
             "&lat=" +
             lat +
@@ -160,7 +160,7 @@
             var iconForecast = forecast.list[j].weather[0].icon;
             console.log("iconForecst is: " + iconForecast);
             var iconUrl =
-              "http://openweathermap.org/img/wn/" + iconForecast + ".png";
+              "https://openweathermap.org/img/wn/" + iconForecast + ".png";
             console.log("iconURL is: " + iconUrl);
             cardIcon.attr("src", iconUrl);
             // console.log(forecast.list[j].weather.icon);
