@@ -37,19 +37,20 @@
           </nav>
         </div>
         <div class="col-8">
-          <div class="container mainDisplay">
+          <div class="container mainDisplay clearfix">
             <div class="row">
-              <h2 class="col-12 searchCity">
+              <h2 class="searchCity">
                 City
               </h2>
-              <div class="row" id="icon">
+              <div id="icon">
                 <img id="openIcon" src="" alt="Weather Icon" />
               </div>
             </div>
-            <p class="row" id="temperature">Current Temperature</p>
-            <p class="row" id="humidity">Humidity</p>
-            <p class="row" id="windSpeed">Wind Speed</p>
-            <p class="row" id="uvIndex">UV Index</p>
+            <p class="row" id="temperature">Current Temperature:</p>
+            <p class="row" id="humidity">Humidity:</p>
+            <p class="row" id="windSpeed">Wind Speed:</p>
+            <p id="uvIndex">UV Index:</p>
+            <p id="uvNumber"></p>
           </div>
           <div class="container">
             <h3 class="col-12" id="forecastHeader">5-Day Forecast</h3>
@@ -119,7 +120,19 @@
             method: "GET"
           }).then(function(uvResponse) {
             console.log(uvResponse);
-            $("#uvIndex").text("UV Index: " + uvResponse.value);
+            var uvNum = uvResponse.value;
+            console.log(uvNum);
+            if (uvNum < 3){
+              $("#uvNumber").text(+" " + uvResponse.value).css("background-color", "green");
+            }else if (uvNum > 3 && uvNum < 6){
+            $("#uvNumber").text(+" " + uvResponse.value).css("background-color", "yellow");
+            }else if (uvNum > 6 && uvNum < 8){
+            $("#uvNumber").text(+" " + uvResponse.value).css("background-color", "orange");
+            }else if (uvNum > 8 && uvNum < 11){
+            $("#uvNumber").text(+" " + uvResponse.value).css("background-color", "red");
+            }else {
+              $("#uvNumber").text(+" " + uvResponse.value).css("background-color", "violet");
+            }
           });
         });
 
@@ -145,7 +158,7 @@
             var cardIcon = $("<img>");
             var cardTemp = $("<p>");
             var cardHumidity = $("<p>");
-            cardBody.attr({ class: "col", value: i });
+            cardBody.attr({ class: "col cardBody", value: i });
             cardDate.text(
               moment()
                 .add(i + 1, "d")
@@ -218,6 +231,8 @@
         console.log(saveCities + " col-10 function is working");
         var cityBtn = $(this).text();
         console.log(cityBtn + " " + typeof cityBtn); //returns as a string, so search array for this string and then userSearch = saveCities[];
+        generateWeather(cityBtn);
+      });
         // var cityIndex = saveCities.indexOf(cityBtn)
         // console.log("City index is: " + cityIndex);
         // console.log(saveCities[cityIndex]);
@@ -227,8 +242,8 @@
 
         // userSearch = saveCities[cityIndex];
         // console.log(userSearch);
-        generateWeather(cityBtn);
-      });
+       
+      
 
       // $("button").on("click", function(){ //need to break down some functions. Added empty buttons when using
       //     var userSearch = $(this).attr("savedCity");
