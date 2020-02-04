@@ -15,4 +15,5 @@ A weather dashboard allows a user to search for a city and presents the user wit
     <li> jQuery </li>
     <li> Moment.js </li>
     <li> Bootstrap </li>
+    <li> Openweathermap API </li>
 </ul>
