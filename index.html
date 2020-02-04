@@ -58,10 +58,10 @@
         </div>
       </div>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type="text/javascript">
+
       //Global variable and Initial conditions
       var saveCities = [];
       retrieveLocal();
@@ -70,19 +70,10 @@
 
       //Generates the data from the API
       function generateWeather(userSearch) {
-        console.log(userSearch);
-        event.preventDefault();
+        // console.log(userSearch);
+        // event.preventDefault();
         $(".fiveDay").empty();
         var date = moment().format(" (M/D/YY)");
-        // var userSearch = $(".form-control").val();
-        // console.log(userSearch);
-        // var lineBreak = $("<br>");
-        // var newBtn = $("<button>");
-        // newBtn.text(userSearch);
-        // newBtn.addClass("col-10", "savedCity");
-        // newBtn.attr("savedCity", userSearch);
-        // console.log(saveCities);
-        // $(".col-4").append(newBtn, lineBreak);
         var apiKey = "bf17ba4b789fcd7882b2b7d45dac95e8";
         var queryURL =
           "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -95,23 +86,27 @@
           method: "GET"
         }).then(function(response) {
           console.log(response);
+          // var newBtn = $("<button>");
+          // newBtn.text(userSearch);
+          // newBtn.addClass("col-10", "savedCity");
+          // newBtn.attr("savedCity", userSearch);
+          // $(".col-4").append(newBtn);
+          // saveCities.push(userSearch);
+          // console.log(saveCities);
+          // localStorage.setItem("Cities", JSON.stringify(saveCities));
           var iconNum = response.weather[0].icon;
-          console.log(iconNum);
+          // console.log(iconNum);
           var iconMain = "https://openweathermap.org/img/wn/" + iconNum + ".png";
-          console.log("Icon url is: " + iconMain);
+          // console.log("Icon url is: " + iconMain);
           $("img").attr("src", iconMain);
           $("h2").text(response.name + date);
-          $("#temperature").text(
-            "Current Temperature: " + response.main.temp + "° F"
-          );
+          $("#temperature").text("Current Temperature: " + response.main.temp + "° F");
           $("#humidity").text("Humidity: " + response.main.humidity + "%");
           $("#windSpeed").text("Wind Speed: " + response.wind.speed + " MPH");
-          // $("#uvIndex").text(+ ": " + response.main.temp);
-          // This portion retrieves the UV Index from another URL
           var lat = response.coord.lat;
-          console.log(lat);
+          // console.log(lat);
           var lon = response.coord.lon;
-          console.log(lon);
+          // console.log(lon);
           var uvURL =
             "https://api.openweathermap.org/data/2.5/uvi?apikey=" +
             apiKey +
@@ -127,6 +122,7 @@
             $("#uvIndex").text("UV Index: " + uvResponse.value);
           });
         });
+
         // This section begins the forecast
         var forecastURL =
           "https:api.openweathermap.org/data/2.5/forecast?q=" +
@@ -134,14 +130,13 @@
           "&apikey=" +
           apiKey +
           "&units=imperial";
-        // console.log(userSearch, apiKey);
+          console.log(forecastURL);
         $.ajax({
           url: forecastURL,
           method: "GET"
         }).then(function(forecast) {
           var j = 0;
           console.log(forecast);
-          //   console.log(forecast.list[0]);
           for (let i = 0; i < 5; i++) {
             j += 7;
             // console.log(j);
@@ -158,20 +153,17 @@
             );
             cardTemp.text("Temperature: " + forecast.list[j].main.temp + "° F");
             var iconForecast = forecast.list[j].weather[0].icon;
-            console.log("iconForecst is: " + iconForecast);
-            var iconUrl =
-              "https://openweathermap.org/img/wn/" + iconForecast + ".png";
-            console.log("iconURL is: " + iconUrl);
+            // console.log("iconForecst is: " + iconForecast);
+            var iconUrl = "https://openweathermap.org/img/wn/" + iconForecast + ".png";
+            // console.log("iconURL is: " + iconUrl);
             cardIcon.attr("src", iconUrl);
-            // console.log(forecast.list[j].weather.icon);
-            cardHumidity.text(
-              "Humidity: " + forecast.list[j].main.humidity + "%"
-            );
-            cardBody.append(cardDate, cardIcon, cardTemp, cardHumidity); //Need to re-add cardIcon, after fixing img source
+            cardHumidity.text("Humidity: " + forecast.list[j].main.humidity + "%");
+            cardBody.append(cardDate, cardIcon, cardTemp, cardHumidity); 
             $(".fiveDay").append(cardBody);
           }
         });
       }
+
       //This function retrieves the local storage and creates buttons for the cities
       function retrieveLocal() {
         var localCity = JSON.parse(localStorage.getItem("Cities"));
@@ -187,8 +179,10 @@
           }
         }
       }
+
       //When user hits search, the input is put through a function to generate weather data.
       $(".btn").on("click", function() {
+        event.preventDefault();
         var userSearch = $(".form-control").val();
         console.log(userSearch + " typeof: " + typeof userSearch);
         if (userSearch == "") {
@@ -216,14 +210,21 @@
         }
       });
 
-      $("button").on("click", function() {
+      //This function goes in action when the user clicks one of the button created below the search bar
+      // $(".col-10").on("click", ".col-10 button" ,function() {
+        $(document).on("click", ".col-10", function(){ 
         document.getElementById("forecastHeader").style.visibility = "visible";
         document.getElementById("openIcon").style.visibility = "visible";
+        console.log(saveCities + " col-10 function is working");
         var cityBtn = $(this).text();
-        // var cityBtn = $(this).attr("savedCity");
         console.log(cityBtn + " " + typeof cityBtn); //returns as a string, so search array for this string and then userSearch = saveCities[];
         // var cityIndex = saveCities.indexOf(cityBtn)
-        // console.log(cityIndex);
+        // console.log("City index is: " + cityIndex);
+        // console.log(saveCities[cityIndex]);
+        // var cityIndexOf = saveCities[cityIndex]
+        // console.log(cityIndexOf);
+
+
         // userSearch = saveCities[cityIndex];
         // console.log(userSearch);
         generateWeather(cityBtn);
