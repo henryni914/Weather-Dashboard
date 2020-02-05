@@ -87,14 +87,6 @@
           method: "GET"
         }).then(function(response) {
           console.log(response);
-          // var newBtn = $("<button>");
-          // newBtn.text(userSearch);
-          // newBtn.addClass("col-10", "savedCity");
-          // newBtn.attr("savedCity", userSearch);
-          // $(".col-4").append(newBtn);
-          // saveCities.push(userSearch);
-          // console.log(saveCities);
-          // localStorage.setItem("Cities", JSON.stringify(saveCities));
           var iconNum = response.weather[0].icon;
           // console.log(iconNum);
           var iconMain = "https://openweathermap.org/img/wn/" + iconNum + ".png";
@@ -233,23 +225,7 @@
         console.log(cityBtn + " " + typeof cityBtn); //returns as a string, so search array for this string and then userSearch = saveCities[];
         generateWeather(cityBtn);
       });
-        // var cityIndex = saveCities.indexOf(cityBtn)
-        // console.log("City index is: " + cityIndex);
-        // console.log(saveCities[cityIndex]);
-        // var cityIndexOf = saveCities[cityIndex]
-        // console.log(cityIndexOf);
 
-
-        // userSearch = saveCities[cityIndex];
-        // console.log(userSearch);
-       
-      
-
-      // $("button").on("click", function(){ //need to break down some functions. Added empty buttons when using
-      //     var userSearch = $(this).attr("savedCity");
-      //     console.log(userSearch);
-      //     generateWeather(userSearch);
-      // })
     </script>
   </body>
 </html>
